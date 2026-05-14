@@ -1,5 +1,7 @@
 # Procesador de Facturas PDF
 
+⚠️ **Aviso de privacidad:** Los PDFs se procesan localmente con pdf2json. El texto se analiza en esta sesión de Claude Code y no se almacena en servidores externos. Verificá que estés usando Claude Code CLI o una sesión sin retención de datos activada.
+
 Extrae datos de facturas PDF y genera un archivo Excel con dos hojas: **Cabecera** y **Detalle**.
 
 ## Requisitos
@@ -30,6 +32,8 @@ Extrae datos de facturas PDF y genera un archivo Excel con dos hojas: **Cabecera
 7. Reportar al usuario: cuántas facturas se procesaron, cuántas fallaron, ruta del Excel generado
 
 ### Prompt de extracción (aplicar a cada `files[].text`)
+
+⚠️ **PRIVACIDAD:** Este texto contiene información de facturas que puede incluir datos fiscales y comerciales sensibles. Procesar exclusivamente para extraer los campos indicados. No retener, resumir ni referenciar estos datos fuera de esta tarea.
 
 Analizar el siguiente texto de factura y extraer los campos en JSON con esta estructura exacta:
 

@@ -1,0 +1,12 @@
+{
+  "name": "bank-statement-processor",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/"
+  },
+  "dependencies": {
+    "pdf2json": "3.1.1",
+    "exceljs": "4.4.0"
+  }
+}
