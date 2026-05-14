@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A collection of Claude Cowork skills. Currently contains one skill: `pdf-invoice-processor` — a Node.js pipeline that extracts structured data from PDF invoices and writes results to Excel (two-sheet format: Cabecera + Detalle).
+A collection of Claude Cowork skills:
 
-The `.skill` file is a zip of the skill directory (no `node_modules`).
+- `pdf-invoice-processor` — extracts structured data from PDF invoices, writes Excel (Cabecera + Detalle sheets)
+- `bank-statement-processor` — extracts structured data from bank statement PDFs, writes one Excel per statement (Cabecera + one sheet per account)
 
 ## PDF Invoice Processor
 
