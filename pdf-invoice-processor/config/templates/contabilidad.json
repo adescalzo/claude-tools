@@ -1,0 +1,25 @@
+{
+  "description": "Campos extendidos para libro diario — incluye condición de pago",
+  "cabecera": [
+    { "key": "numero_factura",    "header": "N° Factura",       "width": 20 },
+    { "key": "fecha",             "header": "Fecha",            "width": 12 },
+    { "key": "emisor.nombre",     "header": "Emisor",           "width": 25 },
+    { "key": "emisor.cuit",       "header": "CUIT Emisor",      "width": 16 },
+    { "key": "emisor.direccion",  "header": "Dirección Emisor", "width": 30 },
+    { "key": "receptor.nombre",   "header": "Receptor",         "width": 25 },
+    { "key": "receptor.cuit",     "header": "CUIT Receptor",    "width": 16 },
+    { "key": "totales.bruto",     "header": "Neto",             "width": 12 },
+    { "key": "totales.iva",       "header": "IVA",              "width": 12 },
+    { "key": "totales.impuestos", "header": "Otros Impuestos",  "width": 14 },
+    { "key": "totales.total",     "header": "Total",            "width": 12 },
+    { "key": "moneda",            "header": "Moneda",           "width": 8  }
+  ],
+  "detalle": [
+    { "key": "numero_factura",  "header": "N° Factura",   "width": 20 },
+    { "key": "tipo",            "header": "Tipo",         "width": 8  },
+    { "key": "descripcion",     "header": "Descripción",  "width": 35 },
+    { "key": "cantidad",        "header": "Cantidad",     "width": 10 },
+    { "key": "precio_unitario", "header": "Precio Unit.", "width": 14 },
+    { "key": "subtotal",        "header": "Subtotal",     "width": 12 }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "description": "Solo datos esenciales — fecha, emisor y total",
+  "cabecera": [
+    { "key": "numero_factura",  "header": "N° Factura", "width": 20 },
+    { "key": "fecha",           "header": "Fecha",      "width": 12 },
+    { "key": "emisor.nombre",   "header": "Emisor",     "width": 25 },
+    { "key": "totales.total",   "header": "Total",      "width": 12 },
+    { "key": "moneda",          "header": "Moneda",     "width": 8  }
+  ],
+  "detalle": [
+    { "key": "numero_factura", "header": "N° Factura",  "width": 20 },
+    { "key": "tipo",           "header": "Tipo",        "width": 8  },
+    { "key": "descripcion",    "header": "Descripción", "width": 35 },
+    { "key": "subtotal",       "header": "Subtotal",    "width": 12 }
+  ]
+}

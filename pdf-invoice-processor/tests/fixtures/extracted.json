@@ -1,0 +1,50 @@
+{
+  "done_folder": "__PLACEHOLDER__",
+  "template": "default",
+  "records": [
+    {
+      "numero_factura": "0001-00000001",
+      "fecha": "10/05/2026",
+      "moneda": "ARS",
+      "emisor": {
+        "nombre": "Proveedor Test S.A.",
+        "cuit": "30-11111111-1",
+        "direccion": "Calle Falsa 123"
+      },
+      "receptor": {
+        "nombre": "Cliente Test S.R.L.",
+        "cuit": "30-22222222-2"
+      },
+      "totales": {
+        "bruto": "1000.00",
+        "impuestos": "0.00",
+        "iva": "210.00",
+        "total": "1210.00"
+      },
+      "items": [
+        {
+          "tipo": "item",
+          "descripcion": "Servicio de prueba",
+          "cantidad": "1",
+          "precio_unitario": "1000.00",
+          "subtotal": "1000.00"
+        },
+        {
+          "tipo": "footer",
+          "descripcion": "IVA 21%",
+          "cantidad": null,
+          "precio_unitario": null,
+          "subtotal": "210.00"
+        },
+        {
+          "tipo": "footer",
+          "descripcion": "Total",
+          "cantidad": null,
+          "precio_unitario": null,
+          "subtotal": "1210.00"
+        }
+      ],
+      "error": null
+    }
+  ]
+}
