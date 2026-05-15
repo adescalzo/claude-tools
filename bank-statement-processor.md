@@ -121,3 +121,31 @@ extractos/
 **Extractos con múltiples cuentas:**
 
 Si el extracto tiene varias cuentas (por ejemplo, BBVA con Cuenta Corriente + Caja de Ahorros en dólares), el Excel genera una hoja por cada cuenta. La extracción la hace un subagente Haiku para minimizar tokens.
+
+---
+
+## Cómo actualizar el skill
+
+Cuando salga una versión nueva del skill (cambios en scripts, SKILL.md, o dependencias):
+
+1. **Traer los archivos nuevos** sobre la carpeta `bank-statement-processor/` existente (sobrescribir).
+   - Si lo clonaste con git: `cd bank-statement-processor && git pull` (o desde la raíz del repo).
+   - Si lo copiaste a mano: reemplazar la carpeta `bank-statement-processor/` por la nueva, **manteniendo** `node_modules/` si no querés reinstalar todo.
+
+2. **Revisar si cambió `package.json`**:
+   - Compará `dependencies` y `version` con la versión anterior.
+   - Si cambió algo, ejecutá:
+     ```bash
+     cd bank-statement-processor && npm install
+     ```
+   - Si no cambió nada, `node_modules/` sigue válido.
+
+3. **Verificar SKILL.md**:
+   - No hace falta hacer nada manual. Claude lee `SKILL.md` cuando activás el skill, así que la versión nueva aplica automáticamente.
+
+4. **Probar con un PDF de muestra** antes de procesar lotes grandes, por si cambió el formato de output o el schema de `extracted.json`.
+
+5. **Si algo falla después de actualizar**, revisá:
+   - `node --version` (sigue siendo >= 18)
+   - Que `node_modules/` exista y tenga `pdf2json` y `exceljs`
+   - Que el comando `node scripts/list-info.js` corra sin error

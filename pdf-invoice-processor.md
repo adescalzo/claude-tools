@@ -118,3 +118,34 @@ Los templates definen qué columnas aparecen en el Excel. Para agregar o modific
 > "Quiero un template que incluya [descripción de las columnas que necesitás]"
 
 Claude va a crear o editar el archivo JSON correspondiente en `pdf-invoice-processor/config/templates/`.
+
+---
+
+## Cómo actualizar el skill
+
+Cuando salga una versión nueva del skill (cambios en scripts, SKILL.md, templates, o dependencias):
+
+1. **Traer los archivos nuevos** sobre la carpeta `pdf-invoice-processor/` existente (sobrescribir).
+   - Si lo clonaste con git: `cd pdf-invoice-processor && git pull` (o desde la raíz del repo).
+   - Si lo copiaste a mano: reemplazar la carpeta `pdf-invoice-processor/` por la nueva, **manteniendo** `node_modules/` si no querés reinstalar todo, y **respetando** los templates personalizados que hayas agregado en `config/templates/`.
+
+2. **Revisar si cambió `package.json`**:
+   - Compará `dependencies` y `version` con la versión anterior.
+   - Si cambió algo, ejecutá:
+     ```bash
+     cd pdf-invoice-processor && npm install
+     ```
+   - Si no cambió nada, `node_modules/` sigue válido.
+
+3. **Verificar `config/excel-config.json`**:
+   - El campo `active_template` puede haberse pisado si copiaste sobre tu instalación. Confirmá que apunta al template que querés.
+
+4. **Verificar SKILL.md**:
+   - No hace falta hacer nada manual. Claude lee `SKILL.md` cuando activás el skill, así que la versión nueva aplica automáticamente.
+
+5. **Probar con un PDF de muestra** antes de procesar lotes grandes, por si cambió el formato de output o el schema de `extracted.json`.
+
+6. **Si algo falla después de actualizar**, revisá:
+   - `node --version` (sigue siendo >= 18)
+   - Que `node_modules/` exista y tenga `pdf2json` y `exceljs`
+   - Que el comando `node scripts/list-templates.js` corra sin error
