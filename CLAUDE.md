@@ -73,15 +73,66 @@ No external API keys required.
 - **`--dry-run` flag**: Not yet implemented.
 - **Duplicate detection**: No MD5 check to prevent processing the same PDF twice.
 
-## Packaging a skill
+## Bank Statement Processor
 
-To update the `.skill` file after editing:
+### Architecture
+
+```
+extract-text.js (pdf2json) → Haiku subagent extracts → build-excel.js (exceljs)
+```
+
+- `extract-text.js`: Reads PDFs with `pdf2json`. Creates one folder per PDF (named after the file) inside the input folder, moves each PDF into its folder, writes raw text to `<done_folder>/raw-text.txt`, outputs metadata-only JSON to stdout (filename, pages, charCount, done_folder, text_file). **Stdout no longer contains the raw text** — keeps it out of the main session's context window.
+- Main Claude session: For each PDF, dispatches an Agent (`subagent_type: general-purpose`, `model: haiku`) with the extraction prompt. The Haiku subagent reads `raw-text.txt`, extracts structured fields, writes `extracted.json` directly to its done_folder. Main session never loads the raw text or the extracted JSON content.
+- `build-excel.js`: Reads a single `extracted.json`, writes one Excel per statement inside its done_folder, named after the source PDF.
+- `list-info.js`: Prints script usage.
+- No API key required — Haiku runs inside the Claude Code session via the Agent tool.
+
+### Key files
+
+- `bank-statement-processor/scripts/extract-text.js` — PDF → stdout JSON with raw text, one done_folder per PDF
+- `bank-statement-processor/scripts/build-excel.js` — extracted.json → Excel with Cabecera + one sheet per account
+- `bank-statement-processor/scripts/list-info.js` — usage info
+- `bank-statement-processor/package.json` — deps: `pdf2json@3.1.1`, `exceljs@4.4.0`
+- `bank-statement-processor/SKILL.md` — instructions loaded by Claude Cowork
+
+### Setup and run
 
 ```bash
-# Linux/Mac
-cd pdf-invoice-processor
-zip -r ../pdf-invoice-processor.skill . --exclude "node_modules/*"
+cd bank-statement-processor
+npm install
 
-# Windows PowerShell
-Compress-Archive -Path pdf-invoice-processor\* -DestinationPath pdf-invoice-processor.skill
+# Extract text from PDFs (stdout = JSON, one done folder per PDF)
+node scripts/extract-text.js --input ./extractos
+
+# Build Excel from extracted.json (Claude writes this file between the two scripts)
+node scripts/build-excel.js --data ./extractos/<pdf-name>/extracted.json
 ```
+
+No external API keys required.
+
+### Data flow
+
+1. `extract-text.js --input <folder>` → creates one folder per PDF, moves PDFs, writes `raw-text.txt` per PDF, prints metadata JSON to stdout
+2. Main session reads stdout metadata, dispatches Haiku Agent per PDF; agent reads `raw-text.txt`, writes `<done_folder>/extracted.json`
+3. `build-excel.js --data <done_folder>/extracted.json` → writes `<done_folder>/<pdf-name>.xlsx` (called once per PDF)
+
+### Excel output structure
+
+**Cabecera sheet** (one row): `archivo`, `banco`, `cliente`, `cuil`, `periodo_desde`, `periodo_hasta`, `cuentas`
+
+**Per-account sheets** (`modo_hojas: "por_cuenta"`, default): one sheet per account named with `cuenta.id`. Columns: `fecha`, `origen`, `concepto`, `debito`, `credito`, `saldo`, `descripcion`.
+
+**Unified sheet** (`modo_hojas: "unificado"`): single sheet `Mov-<banco>` with extra `cuenta` column prepended.
+
+### Supported banks
+
+Tested on BBVA (multi-account consolidated) and Banco Ciudad (single account). Generic extraction prompt handles any AR bank with text-based PDFs.
+
+### Known limitations / pending work
+
+- **Scanned PDFs**: same as invoice processor — `pdf2json` returns empty text for image-only PDFs.
+- **modo_hojas hardcoded to `por_cuenta`**: simplifies flow; if `unificado` needed, add a `--unified` flag to `build-excel.js` or override in `extracted.json`.
+
+## Skill installation guides
+
+Each skill ships with a `<skill-name>.md` at repo root (e.g. `pdf-invoice-processor.md`, `bank-statement-processor.md`). User copies the content into a Claude Code chat and Claude walks them through verification, `npm install`, `.gitignore` update, and CLAUDE.md registration. Replaces the older `.skill` zip distribution.

@@ -120,5 +120,4 @@ extractos/
 
 **Extractos con múltiples cuentas:**
 
-Si el extracto tiene más de una cuenta (por ejemplo, BBVA con Cuenta Corriente + Caja de Ahorros en dólares), Claude va a preguntar:
-> "¿Querés una hoja por cuenta o todos los movimientos en una sola hoja?"
+Si el extracto tiene varias cuentas (por ejemplo, BBVA con Cuenta Corriente + Caja de Ahorros en dólares), el Excel genera una hoja por cada cuenta. La extracción la hace un subagente Haiku para minimizar tokens.

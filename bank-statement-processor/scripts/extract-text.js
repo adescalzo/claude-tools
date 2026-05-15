@@ -1,4 +1,4 @@
-import { readdir, mkdir, rename } from 'node:fs/promises'
+import { readdir, mkdir, rename, writeFile } from 'node:fs/promises'
 import { join, extname, basename } from 'node:path'
 import { parseArgs } from 'node:util'
 import PDFParser from 'pdf2json'
@@ -43,11 +43,13 @@ async function main() {
     const destPath = join(doneFolder, filename)
     try {
       const { text, pages } = await extractTextFromPDF(srcPath)
+      const textFile = join(doneFolder, 'raw-text.txt')
+      await writeFile(textFile, text, 'utf8')
       await rename(srcPath, destPath)
-      files.push({ filename, done_folder: doneFolder, pages, charCount: text.length, text })
+      files.push({ filename, done_folder: doneFolder, pages, charCount: text.length, text_file: textFile })
     } catch (err) {
       try { await rename(srcPath, destPath) } catch {}
-      files.push({ filename, done_folder: doneFolder, pages: 0, charCount: 0, text: '', error: err.message })
+      files.push({ filename, done_folder: doneFolder, pages: 0, charCount: 0, text_file: null, error: err.message })
     }
   }
 
